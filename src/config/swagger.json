@@ -1,0 +1,337 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Clientes",
+    "version": "1.0.0",
+    "description": "Documentação da API de Gerenciamento de Clientes e integração com ChatGPT"
+  },
+  "servers": [
+    {
+      "description": "URL PROD",
+      "url": "http://localhost:3000/api"
+    },
+    {
+      "description": "URL Prism",
+      "url": "http://localhost:4000/api"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ClientsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indica se a operação foi bem-sucedida",
+            "example": true
+          },
+          "clients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "ID do Cliente",
+                  "example": "66ec6bc8a200609b66d0c713"
+                },
+                "nome": {
+                  "type": "string",
+                  "description": "Nome do Cliente",
+                  "example": "João"
+                },
+                "telefone": {
+                  "type": "string",
+                  "description": "Telefone do Cliente",
+                  "example": "5511999999999"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "E-mail do Cliente",
+                  "example": "joao@example.com"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Client": {
+        "type": "object",
+        "required": [
+          "nome",
+          "telefone",
+          "email"
+        ],
+        "properties": {
+          "nome": {
+            "type": "string",
+            "description": "Nome do Cliente",
+            "example": "João"
+          },
+          "telefone": {
+            "type": "string",
+            "description": "Telefone do Cliente",
+            "example": "5511999999999"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do Cliente",
+            "example": "joao@example.com"
+          }
+        }
+      },
+      "UpdateClient": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "description": "Nome do Cliente",
+            "example": "João Nome Alterado"
+          },
+          "telefone": {
+            "type": "string",
+            "description": "Telefone do Cliente",
+            "example": "5511988888888"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do Cliente",
+            "example": "joao_email_alterado@example.com"
+          }
+        }
+      },
+      "ChatInteraction": {
+        "type": "object",
+        "required": [
+          "id",
+          "mensagem"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do cliente existente no banco de dados",
+            "example": "614c1b9f1a3e2b0024b9e1f9"
+          },
+          "mensagem": {
+            "type": "string",
+            "description": "Mensagem enviada pelo cliente",
+            "example": "Olá, como está?"
+          }
+        }
+      },
+      "ChatInteractionResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "mensagem"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do cliente informado",
+            "example": "614c1b9f1a3e2b0024b9e1f9"
+          },
+          "response": {
+            "type": "string",
+            "description": "Resposta recebida da integração",
+            "example": "Olá! Estou bem, obrigado. E você, como está?"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/clients": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Rota para obter a lista de todos os clientes",
+        "responses": {
+          "200": {
+            "description": "Retorna a lista de todos os clientes",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                },
+                "description": "Permitir requisições de qualquer origem"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Rota para criar um novo cliente",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente criado com sucesso"
+          }
+        }
+      }
+    },
+    "/clients/{id}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Rota para obter as informações de um cliente específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna as informações encontradas do cliente especificado pelo ID",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                },
+                "description": "Permitir requisições de qualquer origem"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Rota para atualizar um cliente existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cliente atualizado com sucesso"
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Rota para deletar um cliente existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente deletado com sucesso"
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          },
+          "500": {
+            "description": "Erro ao deletar cliente"
+          }
+        }
+      }
+    },
+    "/clients/chatgpt": {
+      "post": {
+        "tags": [
+          "Clientes/InteraçãoComChatGPT"
+        ],
+        "summary": "Rota para interagir com o ChatGPT",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatInteraction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mensagem de resposta da integração com o ChatGPT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatInteractionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "É necessário fornecer o id e a mensagem"
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          }
+        }
+      }
+    }
+  }
+}
