@@ -8,7 +8,7 @@
   "servers": [
     {
       "description": "URL PROD",
-      "url": "${BASE_URL}/api"
+      "url": "${BASE_URL_SWAGGER}/api"
     },
     {
       "description": "URL Prism",

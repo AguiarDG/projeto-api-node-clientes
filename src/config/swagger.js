@@ -11,7 +11,7 @@ const setupSwaggerDocs = app => {
   };
 
   const swaggerWithEnv = replacePlaceholders(swaggerOptions, {
-    BASE_URL: process.env.BASE_URL,
+    BASE_URL_SWAGGER: process.env.BASE_URL_SWAGGER,
   });
   // Define a rota /api-docs para acessar o Swagger UI
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerWithEnv));
