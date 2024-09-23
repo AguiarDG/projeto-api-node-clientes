@@ -5,7 +5,7 @@ import {
   createClient,
   updateClient,
   deleteClient,
-  chatGPT,
+  interactionWithChatGPT,
 } from "../controllers/client.js";
 
 const clientsRouter = express.Router();
@@ -21,11 +21,11 @@ clientsRouter.get("/clients", getClients);
 /**
  * Rota para obter os detalhes de um cliente específico.
  * Método: GET
- * Endpoint: /clients/:clientId
- * Parâmetro: clientId - O ID do cliente a ser buscado.
+ * Endpoint: /clients/:id
+ * Parâmetro: id - O ID do cliente a ser buscado.
  * Retorna: Dados do cliente especificado.
  */
-clientsRouter.get("/clients/:clientId", getClient);
+clientsRouter.get("/clients/:id", getClient);
 
 /**
  * Rota para adicionar um novo cliente.
@@ -39,21 +39,21 @@ clientsRouter.post("/clients/", createClient);
 /**
  * Rota para atualizar os dados de um cliente específico.
  * Método: PUT
- * Endpoint: /clients/:clientId
- * Parâmetro: clientId - O ID do cliente a ser atualizado.
+ * Endpoint: /clients/:id
+ * Parâmetro: id - O ID do cliente a ser atualizado.
  * Corpo da requisição: Novos dados do cliente.
  * Retorna: Sucesso ou erro ao atualizar o cliente.
  */
-clientsRouter.put("/clients/:clientId", updateClient);
+clientsRouter.put("/clients/:id", updateClient);
 
 /**
  * Rota para deletar um cliente específico.
  * Método: DELETE
- * Endpoint: /clients/:clientId
- * Parâmetro: clientId - O ID do cliente a ser deletado.
+ * Endpoint: /clients/:id
+ * Parâmetro: id - O ID do cliente a ser deletado.
  * Retorna: Sucesso ou erro ao deletar o cliente.
  */
-clientsRouter.delete("/clients/:clientId", deleteClient);
+clientsRouter.delete("/clients/:id", deleteClient);
 
 /**
  * Rota para interagir com a integração com o ChatGPT
@@ -62,6 +62,6 @@ clientsRouter.delete("/clients/:clientId", deleteClient);
  * Corpo da requisição: ID do cliente que vai utilizar a integração e a mensagem que será enviada.
  * Retorna: Sucesso ou erro ao deletar o cliente.
  */
-clientsRouter.post("/clients/chatgpt", chatGPT);
+clientsRouter.post("/clients/chatgpt", interactionWithChatGPT);
 
 export default clientsRouter;

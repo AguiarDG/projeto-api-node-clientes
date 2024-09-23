@@ -21,15 +21,10 @@ export const getClientById = async clientId => {
 };
 
 // Cadastra um novo cliente no banco de dados
-export const createClient = async ({ nome, telefone, email }) => {
-  const newClient = {
-    nome,
-    telefone,
-    email,
-    data_cadastro: moment().tz("America/Sao_Paulo").format(),
-  };
+export const createClient = async newClientData => {
+  newClientData.data_cadastro = moment().tz("America/Sao_Paulo").format();
 
-  const result = await collection.insertOne(newClient);
+  const result = await collection.insertOne(newClientData);
 
   return result.insertedId;
 };

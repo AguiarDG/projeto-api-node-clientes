@@ -12,8 +12,11 @@ export const createClientSchema = object().shape({
 // Validação para atualizar um cliente
 export const updateClientSchema = object()
   .shape({
-    nome: string().min(3),
-    telefone: string().length(15),
+    nome: string().min(2),
+    telefone: string().matches(
+      /^[0-9]{10,15}$/,
+      "O telefone deve conter entre 10 e 15 dígitos"
+    ),
     email: string().email(),
   })
   .test(
