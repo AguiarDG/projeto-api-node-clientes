@@ -23,4 +23,13 @@ services:
     depends_on:
       - mongodb
     environment:
-      MONGO_URI: mongodb://docker:docker@mongodb:27017/db?authSource=admin
+      MONGODB_URI: mongodb://docker:docker@mongodb:27017/db?authSource=admin
+      MONGODB_URI_TEST: mongodb://docker:docker@mongodb:27017/dbtest?authSource=admin
+
+  prism:
+    image: stoplight/prism:4
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./src/config/swagger.json:/app/swagger.json
+    command: 'mock /app/swagger.json -p 4000'
