@@ -20,6 +20,8 @@ export const getClients = async (_, res) => {
     const clients = await clientService.getAllClients();
     res.status(200).json({ success: true, clients });
   } catch (error) {
+    console.error("Erro ao buscar clientes:", error);
+
     res
       .status(500)
       .json({ success: false, message: "Erro ao buscar clientes." });
